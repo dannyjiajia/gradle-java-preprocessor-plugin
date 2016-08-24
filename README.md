@@ -20,7 +20,7 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'wang.dannyhe.tools.preprocessor' //在android插件后应用这个插件
+apply plugin: 'wang.dannyhe.tools.preprocessor' //一定要在android插件用用后再应用这个插件
 ~~~
 
 ## 使用
