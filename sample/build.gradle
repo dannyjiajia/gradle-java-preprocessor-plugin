@@ -29,7 +29,7 @@ android {
 
     productFlavors {
         free {
-            processor.symbols "FREE_VERSION"
+            processor.symbols "FREE_VERSION,PRINT_TEST"
         }
         normal {
             processor.symbols "NFREE_VERSION"

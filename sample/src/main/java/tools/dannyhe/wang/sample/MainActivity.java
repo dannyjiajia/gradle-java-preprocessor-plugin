@@ -32,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
 		//#else
 //@		Log.i("sample","I am not Free Version");
 		//#endif
+
+		//#ifndef PRINT_TEST
+//@		Log.i("sample","PRINT_TEST");
+		//#endif
 	}
 
 	@Override
