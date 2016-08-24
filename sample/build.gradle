@@ -1,8 +1,5 @@
 buildscript {
     repositories {
-        maven {
-            url uri('../repo')
-        }
         jcenter()
     }
     dependencies {
@@ -10,7 +7,8 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'preprocessor'
+apply plugin: 'wang.dannyhe.tools.preprocessor'
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -32,11 +30,10 @@ android {
     productFlavors {
         free {
             processor.symbols "FREE_VERSION"
-            processor.sourceDir file("src/main/java")
-            processor.targetDir file("src/main/java")
         }
         normal {
-            processor.symbols ""
+            processor.symbols "NFREE_VERSION"
+            processor.sourceDir file("src/main/java") //override the global setting
         }
     }
 }
@@ -48,7 +45,17 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
 }
 
-
+// global setting
 preprocessor {
+    verbose true
+    sourceDir file("src/main/java")
+    targetDir file("src/main/java")
+}
+
+// custom task
+task customProcessJavaTask(type:wang.dannyhe.tools.PreprocessorTask) {
+    sourceDir file("src/main/java")
+    targetDir file("src/main/java")
+    symbols "FREE_VERSION"
     verbose true
 }
