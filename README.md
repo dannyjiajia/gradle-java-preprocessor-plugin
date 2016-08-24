@@ -1,8 +1,7 @@
 # gradle-java-preprocessor-plugin
 
 ## 特点
-将Antenna的Preprocess功能适配到gradle的插件中,可以在Android项目中使用宏修改`Java`代码.
-关于`Antenna`: http://antenna.sourceforge.net/wtkpreprocess.php
+将[Antenna](http://antenna.sourceforge.net/wtkpreprocess.php)的Preprocess功能适配到gradle的插件中,可以在Android项目中使用宏修改`Java`代码.
 
 * 可以灵活自定义处理java代码的任务
 * 插件拓展`productFlavors`,在build的时候自动执行任务
@@ -87,7 +86,7 @@ gradle preprocessFreeRelease
 //#endif
 ~~~
 
-`FREE_VERSION`已经生效并自动修改了Java源码
+可以看见`FREE_VERSION`已经生效并自动修改了Java源码
 
 ### 拓展使用
 
