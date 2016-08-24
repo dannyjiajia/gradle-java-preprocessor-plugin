@@ -1,23 +1,64 @@
+plugins {
+    id 'nu.studer.plugindev' version '1.0.3'
+
+    // Should come along with plugindev, but plugindev uses an old version
+    id 'com.jfrog.bintray' version '1.6'
+}
+
 apply plugin: 'groovy'
-apply plugin: 'maven'
 
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile 'org.apache.ant:ant:1.8.4'
 }
+
+// This makes it easier to figure out issues with Travis CI builds
+test {
+    testLogging.showStandardStreams = true
+}
+
+apply plugin: 'maven'
 
 repositories {
     mavenCentral()
 }
 
+
+dependencies {
+    compile 'org.apache.ant:ant:1.8.4'
+    testCompile 'junit:junit:4.11'
+}
+
+
 group='wang.dannyhe.tools'
 version='0.0.1'
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: uri('../repo'))
+
+plugindev {
+    pluginId 'wang.dannyhe.tools.preprocessor'
+    pluginName 'plugin'
+    pluginImplementationClass 'wang.dannyhe.tools.PreprocessorPlugin'
+    pluginDescription 'Gradle plugin that lets an Android project use antenna preprocess.'
+    pluginLicenses 'Apache-2.0'
+    pluginTags 'gradle', 'plugin', 'android', 'antenna',' preprocess'
+    authorId 'dannyjiajia'
+    authorName 'Danny He'
+    authorEmail 'dannyjiajia@gmail.com'
+    projectUrl 'https://github.com/dannyjiajia/gradle-java-preprocessor-plugin'
+    projectInceptionYear '2016'
+    done() // do not omit this
+}
+
+// If you want to upload this, make sure to set BINTRAY_USER and BINTRAY_API_KEY in gradle.properties
+if (project.hasProperty('BINTRAY_USER') && project.hasProperty('BINTRAY_API_KEY')) {
+    bintray {
+        dryRun = false // Turn off when actually deploying
+        publish = false // Maybe someday turn this on for auto-publishing
+
+        user = "$BINTRAY_USER"
+        key = "$BINTRAY_API_KEY"
+        pkg {
+            repo = 'gradle-plugins'
         }
     }
 }
