@@ -1,6 +1,6 @@
 # gradle-java-preprocessor-plugin
 
-Chinese version readme:[README_CN.md](README_CN.md)
+Chinese version [README_CN.md](README_CN.md)
 
 ## Features
 
