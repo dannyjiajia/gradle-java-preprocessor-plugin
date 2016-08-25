@@ -1,14 +1,17 @@
 # gradle-java-preprocessor-plugin
 
-## 特点
-将[Antenna](http://antenna.sourceforge.net/wtkpreprocess.php)的Preprocess功能适配到gradle的插件中,可以在Android项目中使用宏修改`Java`代码.
+Chinese version readme:[README_CN.md](README_CN.md)
 
-* 可以灵活自定义处理java代码的任务
-* 插件拓展`productFlavors`,在build的时候自动执行任务
+## Features
 
-## 安装
+The plugin is a gradle adaptation of the `Antenna` [preprocessor](http://antenna.sourceforge.net/wtkpreprocess.php) task.
 
-在`build.gradle`中加入以下配置
+* We can add custom task to handle the java source code.
+* The plugin expand the `productFlavors` config in Android plugin,it's auto add process tasks before android build tasks.
+
+## Installation
+
+Add the following to your `build.gradle`:
 
 ~~~
 buildscript {
@@ -20,45 +23,44 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'wang.dannyhe.tools.preprocessor' //一定要在android插件用用后再应用这个插件
+apply plugin: 'wang.dannyhe.tools.preprocessor' //make sure to apply this plugin after the Android plugin
 ~~~
 
-## 使用
+## Usage
 
-### 配置
+### Config
 
-全局配置,这个是可选的.
+The global config is optional.
 
 ~~~
 // global setting
 preprocessor {
-    verbose true //是否打印日志
-    sourceDir file("src/main/java") //Java源码所在根目录
-    targetDir file("src/main/java") //生成的Java的根目录
-    groupName 'preprocessor' //插件根据productFlavors生成的任务所在的分组名
+    verbose true //print the log message
+    sourceDir file("src/main/java") //the root dir of java source files
+    targetDir file("src/main/java") //the root dir to export the java source files
+    groupName 'preprocessor' //the group name for plugin auto create tasks
 }
 
 ~~~
 
-配置`productFlavors`
+Plugin adds `processor` to the Android plugin in `productFlavors`.You can define the processor argments for each flavor build.
 
 ~~~
 productFlavors {
 	free {
-	    processor.symbols "FREE_VERSION" //定义宏,其他设置会继承preprocessor中的全局配置
+	    processor.symbols "FREE_VERSION" //define the symbols to java
 	}
 	normal {
 	    processor.symbols "NFREE_VERSION"
-	    processor.sourceDir file("src/main/java") //如果全局配置中存在sourceDir配置,这里会覆盖
-	    processor.targetDir file("src/main/java") //如果全局配置中存在targetDir配置,这里会覆盖
+	    processor.sourceDir file("src/main/java") //this config override the global config
+	    processor.targetDir file("src/main/java") //this config override the global config
 	}
 }
 ~~~
 
+### Use macro in Java
 
-### Java中使用宏
-
-比如在`MainActivity.java`中使用
+We can add "macro" in java file,as `MainActivity.java`:
 
 ~~~
 //#ifdef FREE_VERSION
@@ -68,15 +70,15 @@ productFlavors {
 //#endif
 ~~~
 
-### 执行任务
+### Execute the task
 
-执行构建任务便会自动执行Java源码的修改,当然我们也可以手动执行任务.如:
+The task would be auto executed before Android java Compile task,and we can execute it manually.
 
 ~~~
 gradle preprocessFreeRelease
 ~~~
 
-最终Java代码会变成:
+Finally,the `MainActivity.java` file would be changed by plugin:
 
 ~~~
 //#ifdef FREE_VERSION
@@ -86,11 +88,9 @@ gradle preprocessFreeRelease
 //#endif
 ~~~
 
-可以看见`FREE_VERSION`已经生效并自动修改了Java源码
+### Custom task
 
-### 拓展使用
-
-自定义任务:
+we can define the custom preprocessor task.
 
 ~~~
 // custom task
