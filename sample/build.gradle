@@ -1,10 +1,9 @@
 buildscript {
     repositories {
         jcenter()
-        mavenLocal()
     }
     dependencies {
-        classpath 'wang.dannyhe.tools:plugin:0.0.+'
+        classpath 'wang.dannyhe.tools:plugin:latest.release'
     }
 }
 apply plugin: 'com.android.application'

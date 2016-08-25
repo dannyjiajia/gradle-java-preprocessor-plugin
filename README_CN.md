@@ -18,7 +18,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'wang.dannyhe.tools:plugin:0.0.2'
+        classpath 'wang.dannyhe.tools:plugin:latest.release' //使用最新版本
     }
 }
 apply plugin: 'com.android.application'
