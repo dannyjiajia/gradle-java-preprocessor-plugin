@@ -21,22 +21,25 @@ public class PreprocessorPlugin implements Plugin<Project> {
     void configProject(Project project) {
         project.android.applicationVariants.all { variant ->
             variant.productFlavors.each { flavor ->
-                def finalSourceDir = flavor.processor.sourceDir == null ? project.preprocessor.sourceDir : flavor.processor.sourceDir
-                def finalTargetDir = flavor.processor.targetDir == null ? project.preprocessor.targetDir : flavor.processor.targetDir
-                def finalVerbose = project.preprocessor ? project.preprocessor.verbose : true
-                def groupName = project.preprocessor ? project.preprocessor.groupName : "preprocessor"
-                final def processorTaskName = "preprocess${flavor.name.capitalize()}${variant.buildType.name.capitalize()}"
-                project.task(processorTaskName,type:PreprocessorTask) {
-                    symbols flavor.processor.symbols
-                    verbose finalVerbose
-                    sourceDir finalSourceDir
-                    targetDir finalTargetDir
-                    group groupName
-                    description "Preprocess java source code for ${flavor.name.capitalize()} ${variant.buildType.name.capitalize()}."
+                def badConfig = (flavor.processor.sourceDir == null && project.preprocessor.sourceDir == null) || (project.preprocessor.targetDir == null && flavor.processor.targetDir == null)
+                if (!badConfig)
+                {
+                    def finalSourceDir = flavor.processor.sourceDir == null ? project.preprocessor.sourceDir : flavor.processor.sourceDir
+                    def finalTargetDir = flavor.processor.targetDir == null ? project.preprocessor.targetDir : flavor.processor.targetDir
+                    def finalVerbose = project.preprocessor ? project.preprocessor.verbose : true
+                    def groupName = project.preprocessor ? project.preprocessor.groupName : "preprocessor"
+                    final def processorTaskName = "preprocess${flavor.name.capitalize()}${variant.buildType.name.capitalize()}"
+                    project.task(processorTaskName,type:PreprocessorTask) {
+                        symbols flavor.processor.symbols
+                        verbose finalVerbose
+                        sourceDir finalSourceDir
+                        targetDir finalTargetDir
+                        group groupName
+                        description "Preprocess java source code for ${flavor.name.capitalize()} ${variant.buildType.name.capitalize()}."
+                    }
+                    variant.javaCompile.dependsOn processorTaskName
                 }
-                variant.javaCompile.dependsOn processorTaskName
             }
-
         }
     }
 
