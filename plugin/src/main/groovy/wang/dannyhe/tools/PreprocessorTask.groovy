@@ -24,7 +24,7 @@ public class PreprocessorTask extends DefaultTask {
 
         if (!targetDir?.exists()) {
             if (!targetDir.mkdirs()) {
-                throw PreprocessorException("destination create failed!", destination)
+                throw PreprocessorException("targetDir create failed!", targetDir)
             }
         }
 
