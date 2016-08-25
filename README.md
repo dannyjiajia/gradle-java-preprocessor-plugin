@@ -1,5 +1,6 @@
 # gradle-java-preprocessor-plugin
 
+[ ![Download](https://api.bintray.com/packages/dannyjiajia/gradle-plugins/plugin/images/download.svg) ](https://bintray.com/dannyjiajia/gradle-plugins/plugin/_latestVersion)
 Chinese version [README_CN.md](README_CN.md)
 
 ## Features

@@ -1,5 +1,7 @@
 # gradle-java-preprocessor-plugin
 
+[ ![Download](https://api.bintray.com/packages/dannyjiajia/gradle-plugins/plugin/images/download.svg) ](https://bintray.com/dannyjiajia/gradle-plugins/plugin/_latestVersion)
+
 ## 特点
 将[Antenna](http://antenna.sourceforge.net/wtkpreprocess.php)的Preprocess功能适配到gradle的插件中,可以在Android项目中使用宏修改`Java`代码.
 
