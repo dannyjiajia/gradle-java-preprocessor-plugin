@@ -16,7 +16,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'wang.dannyhe.tools:plugin:0.0.1'
+        classpath 'wang.dannyhe.tools:plugin:0.0.2'
     }
 }
 apply plugin: 'com.android.application'
