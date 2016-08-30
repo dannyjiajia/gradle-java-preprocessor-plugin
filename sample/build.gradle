@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         jcenter()
+        mavenLocal() //for developer.
     }
     dependencies {
         classpath 'wang.dannyhe.tools:plugin:latest.release'
