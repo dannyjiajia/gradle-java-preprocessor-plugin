@@ -11,7 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
-
+	//#ifdef KEY
+	//#expand public static String SDK_KEY = "%KEY%";
+	public static String SDK_KEY = "key";
+	//#endif
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,8 +36,12 @@ public class MainActivity extends AppCompatActivity {
 //@		Log.i("sample","I am not Free Version");
 		//#endif
 
-		//#ifndef PRINT_TEST
-//@		Log.i("sample","PRINT_TEST");
+		//#if PRINT && FREE_VERSION
+		Log.i("sample","FREE_VERSION PRINT");
+		//#endif
+		
+		//#if VERSION >= 5
+		Log.i("sample","VERSION >= 5");
 		//#endif
 	}
 

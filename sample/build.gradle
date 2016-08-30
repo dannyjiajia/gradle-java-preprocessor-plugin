@@ -4,7 +4,7 @@ buildscript {
         mavenLocal() //for developer.
     }
     dependencies {
-        classpath 'wang.dannyhe.tools:plugin:latest.release'
+        classpath 'wang.dannyhe.tools:plugin:0.0.3'
     }
 }
 apply plugin: 'com.android.application'
@@ -30,10 +30,15 @@ android {
 
     productFlavors {
         free {
-            processor.symbols "FREE_VERSION,PRINT_TEST"
+            // uncomment to test process.
+            // processor.symbols "FREE_VERSION"
+            // processor.symbols "FREE_VERSION,PRINT"
+            // processor.symbols "FREE_VERSION,VERSION=1"
+            // processor.symbols "FREE_VERSION,VERSION=5"
+            processor.symbols "FREE_VERSION,VERSION=5,PRINT,KEY=key"
         }
         normal {
-            processor.symbols "NFREE_VERSION"
+            processor.symbols ""
             processor.sourceDir file("src/main/java") //override the global setting
         }
     }
