@@ -8,6 +8,9 @@ public class PreprocessorPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
+        if (!project.plugins.hasPlugin('com.android.application')) {
+            throw new ProjectConfigurationException("PreprocessorPlugin should be applyed after the android plugin.",new java.lang.Throwable("void apply(Project project)"))
+        }
         //init the extensions
         project.extensions.create('preprocessor', PluginGlobalSettingExtension)
         project.android.productFlavors.whenObjectAdded { flavor ->
@@ -40,7 +43,7 @@ public class PreprocessorPlugin implements Plugin<Project> {
                     }
                     variant.javaCompile.dependsOn processorTaskName
                 }else {
-                    throw new ProjectConfigurationException("plugin can't create the task on ${flavor.name.capitalize()} flavor,because of bad config.",new java.lang.Throwable("PreprocessorPlugin"))
+                    throw new ProjectConfigurationException("plugin can't create the task on ${flavor.name.capitalize()} flavor,because of bad config.",new java.lang.Throwable("void configProject(Project project)"))
                 }
             }
         }
