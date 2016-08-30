@@ -13,7 +13,6 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 	//#ifdef KEY
 	//#expand public static String SDK_KEY = "%KEY%";
-	public static String SDK_KEY = "key";
 	//#endif
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
