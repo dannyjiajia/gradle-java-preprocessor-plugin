@@ -50,7 +50,7 @@ plugindev {
 }
 
 // we read the config infomation from "local.properties"
-def Properties localProp() {
+def Properties loadLocalProp() {
     def versionFile = new File(project.rootDir, 'local.properties')
     def version = new Properties()
     def stream
@@ -64,8 +64,9 @@ def Properties localProp() {
     return version
 }
 
-def BINTRAY_USER = localProp()['BINTRAY_USER']
-def BINTRAY_API_KEY = localProp()['BINTRAY_API_KEY']
+def localProp = loadLocalProp()
+def BINTRAY_USER = localProp['BINTRAY_USER']
+def BINTRAY_API_KEY = localProp['BINTRAY_API_KEY']
 
 // If you want to upload this, make sure to set BINTRAY_USER and BINTRAY_API_KEY in local.properties
 if (BINTRAY_USER && BINTRAY_API_KEY) {
