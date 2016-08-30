@@ -49,34 +49,25 @@ plugindev {
     done() // do not omit this
 }
 
-// 
-// read bintray user and api key form gitignored local.properties file
-// 
-def FILE_LOCAL_PROPERTIES = "local.properties"
-Properties localProp = new Properties()
-def getFileInDir = { dir -> 
-    File ret = new File("$dir$File.separator$FILE_LOCAL_PROPERTIES")
-    ret?.exists() ? ret : null
+// we read the config infomation from "local.properties"
+def Properties localProp() {
+    def versionFile = new File(project.rootDir, 'local.properties')
+    def version = new Properties()
+    def stream
+    try {
+        stream = new FileInputStream(versionFile)
+        version.load(stream)
+    } catch (FileNotFoundException ignore) {
+    } finally {
+        if (stream != null) stream.close()
+    }
+    return version
 }
 
-def rootLocalPropFile = getFileInDir(project.rootDir)
-if (rootLocalPropFile) {
-    localProp.load(rootLocalPropFile.newDataInputStream())
-}
+def BINTRAY_USER = localProp()['BINTRAY_USER']
+def BINTRAY_API_KEY = localProp()['BINTRAY_API_KEY']
 
-def localPropFile = getFileInDir(project.projectDir)
-if (localPropFile) {
-    Properties tmpProp = new Properties()
-    tmpProp.load(localPropFile.newDataInputStream())
-    localProp.putAll(tmpProp)
-}
-    
-def propLocal = { localProp?.get it }
-
-def BINTRAY_USER = "${propLocal 'BINTRAY_USER'}"
-def BINTRAY_API_KEY = "${propLocal 'BINTRAY_API_KEY'}"
-
-// If you want to upload this, make sure to set BINTRAY_USER and BINTRAY_API_KEY in gradle.properties
+// If you want to upload this, make sure to set BINTRAY_USER and BINTRAY_API_KEY in local.properties
 if (BINTRAY_USER && BINTRAY_API_KEY) {
     bintray {
         dryRun = false // Turn off when actually deploying
