@@ -2,6 +2,7 @@ package wang.dannyhe.tools
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.ProjectConfigurationException
 
 public class PreprocessorPlugin implements Plugin<Project> {
 
@@ -38,11 +39,12 @@ public class PreprocessorPlugin implements Plugin<Project> {
                         description "Preprocess java source code for ${flavor.name.capitalize()} ${variant.buildType.name.capitalize()}."
                     }
                     variant.javaCompile.dependsOn processorTaskName
+                }else {
+                    throw new ProjectConfigurationException("plugin can't create the task on ${flavor.name.capitalize()} flavor,because of bad config.",new java.lang.Throwable("PreprocessorPlugin"))
                 }
             }
         }
     }
-
 }
 
 class FlavorExtension {
