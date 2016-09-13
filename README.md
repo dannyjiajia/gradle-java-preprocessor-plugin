@@ -82,7 +82,7 @@ The task would be auto executed before Android java Compile task,and we can exec
 gradle preprocessFreeRelease
 ~~~
 
-Finally,the `MainActivity.java` file would be changed by plugin:
+Finally,the `MainActivity.java` file would be modify by plugin:
 
 ~~~
 //#ifdef FREE_VERSION
