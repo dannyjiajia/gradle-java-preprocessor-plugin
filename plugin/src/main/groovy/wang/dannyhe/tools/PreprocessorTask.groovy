@@ -7,6 +7,7 @@ import org.apache.tools.ant.util.FileUtils
 import de.pleumann.antenna.misc.Strings
 import antenna.preprocessor.PreprocessorException
 import antenna.preprocessor.IPreprocessor
+import org.gradle.api.tasks.*;
 
 public class PreprocessorTask extends DefaultTask {
 
@@ -65,6 +66,16 @@ public class PreprocessorTask extends DefaultTask {
         if (verbose) {
             println(msg)
         }
+    }
+
+    @InputDirectory
+    public File getSourceDir() {
+        return this.sourceDir
+    }
+
+    @OutputDirectory
+    public File getTargetDir() {
+        return this.targetDir
     }
 
     //copy from WtkPreprocess.java
