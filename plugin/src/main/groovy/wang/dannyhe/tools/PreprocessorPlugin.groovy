@@ -10,7 +10,7 @@ public class PreprocessorPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        if (!project.plugins.hasPlugin('com.android.application')) {
+        if (!(project.plugins.hasPlugin('com.android.application') || project.plugins.hasPlugin('com.android.library'))) {
             throw new ProjectConfigurationException("PreprocessorPlugin should be applyed after the android plugin.",new java.lang.Throwable("void apply(Project project)"))
         }
         //init the extensions
@@ -29,31 +29,41 @@ public class PreprocessorPlugin implements Plugin<Project> {
         if(global.sourceDir == null || global.targetDir == null) {
             throw new ProjectConfigurationException("must set default sourceDir and targetDir in global preprocessor.",new java.lang.Throwable("void configProject(Project project)"))
         }
-        project.android.applicationVariants.all { variant ->
-            final def processorTaskName = "${variant.name.capitalize()}-preprocess"
-            def finalFlavorExtensions = new ArrayList<FlavorExtension>()
-            if(variant.productFlavors.size() > 0) {
-                variant.productFlavors.each { flavor ->
-                    finalFlavorExtensions.add(flavor.processor)
-                }
-            }
 
-            def fSymbols = new HashSet<String>()
-            finalFlavorExtensions.each {flavorExt->
-                fSymbols.addAll(flavorExt.symbols)
+        if (project.plugins.hasPlugin('com.android.application')) {
+            project.android.applicationVariants.all { variant ->
+                configVariant(variant, project, global)
             }
-            fSymbols.addAll(global.symbols)
-            project.task(processorTaskName,type:PreprocessorTask) {
-                symbols fSymbols.join(",")
-                verbose global.verbose
-                sourceDir global.sourceDir
-                targetDir  global.targetDir
-                group global.groupName
-                description "Preprocess java source code for ${processorTaskName}:${fSymbols.join(",")}"
+        } else if (project.plugins.hasPlugin('com.android.library')) {
+            project.android.libraryVariants.all { variant ->
+                configVariant(variant, project, global)
             }
-            variant.javaCompile.dependsOn processorTaskName
-
         }
+    }
+
+    void configVariant(Object variant, Project project, PluginGlobalSettingExtension global) {
+        final def processorTaskName = "${variant.name.capitalize()}-preprocess"
+        def finalFlavorExtensions = new ArrayList<FlavorExtension>()
+        if(variant.productFlavors.size() > 0) {
+            variant.productFlavors.each { flavor ->
+                finalFlavorExtensions.add(flavor.processor)
+            }
+        }
+
+        def fSymbols = new HashSet<String>()
+        finalFlavorExtensions.each {flavorExt->
+            fSymbols.addAll(flavorExt.symbols)
+        }
+        fSymbols.addAll(global.symbols)
+        project.task(processorTaskName,type:PreprocessorTask) {
+            symbols fSymbols.join(",")
+            verbose global.verbose
+            sourceDir global.sourceDir
+            targetDir  global.targetDir
+            group global.groupName
+            description "Preprocess java source code for ${processorTaskName}:${fSymbols.join(",")}"
+        }
+        variant.javaCompile.dependsOn processorTaskName
     }
 }
 

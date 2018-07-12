@@ -4,7 +4,7 @@ buildscript {
         mavenLocal() //for developer.
     }
     dependencies {
-        classpath 'wang.dannyhe.tools:plugin:0.0.6'
+        classpath 'wang.dannyhe.tools:plugin:0.0.7'
     }
 }
 apply plugin: 'com.android.application'
