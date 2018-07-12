@@ -13,6 +13,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 	//#ifdef KEY
 	//#expand public static String SDK_KEY = "%KEY%";
+//@	public static String SDK_KEY = "%KEY%";
 	//#endif
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,23 +26,33 @@ public class MainActivity extends AppCompatActivity {
 		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+				StringBuilder sb = new StringBuilder();
+				//#ifdef FREE
+//@				sb.append(" FREE");
+				//#endif
+				//#ifdef XIAOMI
+				sb.append(" XIAOMI");
+				//#endif
+				//#ifdef HUAWEI
+//@				sb.append(" HUAWEI");
+				//#endif
+				//#ifdef VIP
+				sb.append(" VIP");
+				//#endif
+				//#if VERSION >= 5
+//@				sb.append(" VERSION >= 5");
+				//#endif
+				//#if PRINT && FREE
+//@				sb.append(" PRINT & FREE");
+				//#endif
+				Snackbar.make(view, sb.toString(), Snackbar.LENGTH_LONG)
 						.setAction("Action", null).show();
 			}
 		});
-		//#ifdef FREE_VERSION
-		Log.i("sample","I am Free Version");
-		//#else
-//@		Log.i("sample","I am not Free Version");
-		//#endif
 
-		//#if PRINT && FREE_VERSION
-		Log.i("sample","FREE_VERSION PRINT");
-		//#endif
+
 		
-		//#if VERSION >= 5
-		Log.i("sample","VERSION >= 5");
-		//#endif
+
 	}
 
 	@Override

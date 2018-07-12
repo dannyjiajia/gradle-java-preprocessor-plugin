@@ -1,5 +1,7 @@
 package wang.dannyhe.tools
 
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.ProjectConfigurationException
@@ -14,7 +16,7 @@ public class PreprocessorPlugin implements Plugin<Project> {
         //init the extensions
         project.extensions.create('preprocessor', PluginGlobalSettingExtension)
         project.android.productFlavors.whenObjectAdded { flavor ->
-            flavor.extensions.create("processor", FlavorExtension, "")
+            flavor.extensions.create("processor", FlavorExtension)
         }
 
         project.afterEvaluate {
@@ -23,65 +25,45 @@ public class PreprocessorPlugin implements Plugin<Project> {
     }
 
     void configProject(Project project) {
+        PluginGlobalSettingExtension global = project.preprocessor
+        if(global.sourceDir == null || global.targetDir == null) {
+            throw new ProjectConfigurationException("must set default sourceDir and targetDir in global preprocessor.",new java.lang.Throwable("void configProject(Project project)"))
+        }
         project.android.applicationVariants.all { variant ->
-            variant.productFlavors.each { flavor ->
-                def badConfig = (flavor.processor.sourceDir == null && project.preprocessor.sourceDir == null) || (project.preprocessor.targetDir == null && flavor.processor.targetDir == null)
-                if (!badConfig)
-                {
-                    def finalSourceDir = flavor.processor.sourceDir == null ? project.preprocessor.sourceDir : flavor.processor.sourceDir
-                    def finalTargetDir = flavor.processor.targetDir == null ? project.preprocessor.targetDir : flavor.processor.targetDir
-                    def finalVerbose = project.preprocessor ? project.preprocessor.verbose : true
-                    def groupName = project.preprocessor ? project.preprocessor.groupName : "preprocessor"
-                    final def processorTaskName = "preprocess${flavor.name.capitalize()}${variant.buildType.name.capitalize()}"
-                    project.task(processorTaskName,type:PreprocessorTask) {
-                        symbols flavor.processor.symbols
-                        verbose finalVerbose
-                        sourceDir finalSourceDir
-                        targetDir finalTargetDir
-                        group groupName
-                        description "Preprocess java source code for ${flavor.name.capitalize()} ${variant.buildType.name.capitalize()}."
-                    }
-                    variant.javaCompile.dependsOn processorTaskName
-                }else {
-                    throw new ProjectConfigurationException("plugin can't create the task on ${flavor.name.capitalize()} flavor,because of bad config.",new java.lang.Throwable("void configProject(Project project)"))
+            final def processorTaskName = "${variant.name.capitalize()}-preprocess"
+            def finalFlavorExtensions = new ArrayList<FlavorExtension>()
+            if(variant.productFlavors.size() > 0) {
+                variant.productFlavors.each { flavor ->
+                    finalFlavorExtensions.add(flavor.processor)
                 }
             }
+
+            def fSymbols = new HashSet<String>()
+            finalFlavorExtensions.each {flavorExt->
+                fSymbols.addAll(flavorExt.symbols)
+            }
+            fSymbols.addAll(global.symbols)
+            project.task(processorTaskName,type:PreprocessorTask) {
+                symbols fSymbols.join(",")
+                verbose global.verbose
+                sourceDir global.sourceDir
+                targetDir  global.targetDir
+                group global.groupName
+                description "Preprocess java source code for ${processorTaskName}:${fSymbols.join(",")}"
+            }
+            variant.javaCompile.dependsOn processorTaskName
+
         }
     }
 }
 
+@EqualsAndHashCode
+@ToString
 class FlavorExtension {
-    String symbols
-    File sourceDir
-    File targetDir
-
-    FlavorExtension(String symbols){
-        this.symbols = symbols
-    }
-
-    String getSymbols() {
-        return symbols
-    }
-
-    void setSymbols(String symbols) {
-        this.symbols = symbols
-    }
-
-    File getSourceDir() {
-        return sourceDir
-    }
-
-    File getTargetDir() {
-        return targetDir
-    }
-
-    void setSourceDir(File sourceDir) {
-        this.sourceDir = sourceDir
-    }
-
-    void setTargetDir(File targetDir) {
-        this.targetDir = targetDir
-    }
+    String[] symbols = [""] as String[]
+//    File sourceDir
+//    File targetDir
+//    String name
 }
 
 class PluginGlobalSettingExtension {
@@ -89,4 +71,7 @@ class PluginGlobalSettingExtension {
     File targetDir
     boolean verbose = true
     String groupName = "preprocessor"
+    String[] symbols = [""] as String[]
+
+
 }

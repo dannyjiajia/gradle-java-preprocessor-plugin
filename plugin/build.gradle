@@ -31,7 +31,7 @@ dependencies {
 
 
 group='wang.dannyhe.tools'
-version='0.0.5'
+version='0.0.6'
 
 
 plugindev {
@@ -72,7 +72,7 @@ def BINTRAY_API_KEY = localProp['BINTRAY_API_KEY']
 if (BINTRAY_USER && BINTRAY_API_KEY) {
     bintray {
         dryRun = false // Turn off when actually deploying
-        publish = false // Maybe someday turn this on for auto-publishing
+        publish = true // Maybe someday turn this on for auto-publishing
 
         user = "$BINTRAY_USER"
         key = "$BINTRAY_API_KEY"
