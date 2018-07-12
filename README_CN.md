@@ -26,8 +26,49 @@ apply plugin: 'wang.dannyhe.tools.preprocessor' //一定要在android插件用�
 ~~~
 
 ## 使用
+### 配置(v0.0.6及后续版本变动)
+全局配置必须设置,`sourceDir`和`targetDir`只能通过`preprocessor`设置
 
-### 配置
+~~~
+preprocessor {
+    verbose true
+    sourceDir file("src/main/java") //必须设置
+    targetDir file("src/main/java") //必须设置
+    symbols "GLOBAL","GLOBAL_2" //修改类型为String[],全局设置的`symbols`会和`productFlavors`取并集,不存在productFlavors时，项目完全使用全局宏定义
+}
+~~~
+
+配置`productFlavors`和`flavorDimensions`
+
+~~~
+flavorDimensions "money", "channel"
+    productFlavors {
+
+        xiaomi {
+            processor.symbols "XIAOMI"
+            dimension "money"
+        }
+
+        huawei {
+            processor.symbols "HUAWEI"
+            dimension "channel"
+        }
+
+        free {
+            // uncomment to test process.
+            // processor.symbols "FREE","PRINT"
+            // processor.symbols "FREE","VERSION=1"
+            processor.symbols "FREE","VERSION=5" //同样参数变为String[]
+            dimension "channel"
+        }
+        VIP {
+            processor.symbols "VIP"
+            dimension "channel"
+        }
+    }
+~~~
+
+### 配置(v0.0.5及以下版本)
 
 全局配置,这个是可选的.
 

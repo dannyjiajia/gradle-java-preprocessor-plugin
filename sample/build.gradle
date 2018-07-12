@@ -4,7 +4,7 @@ buildscript {
         mavenLocal() //for developer.
     }
     dependencies {
-        classpath 'wang.dannyhe.tools:plugin:latest.release'
+        classpath 'wang.dannyhe.tools:plugin:0.0.6'
     }
 }
 apply plugin: 'com.android.application'
@@ -12,7 +12,7 @@ apply plugin: 'wang.dannyhe.tools.preprocessor'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "tools.dannyhe.wang.sample"
@@ -27,19 +27,29 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
+    flavorDimensions "money", "channel"
     productFlavors {
+
+        xiaomi {
+            processor.symbols "XIAOMI"
+            dimension "money"
+        }
+
+        huawei {
+            processor.symbols "HUAWEI"
+            dimension "channel"
+        }
+
         free {
             // uncomment to test process.
-            // processor.symbols "FREE_VERSION"
-            // processor.symbols "FREE_VERSION,PRINT"
-            // processor.symbols "FREE_VERSION,VERSION=1"
-            // processor.symbols "FREE_VERSION,VERSION=5"
-            processor.symbols "FREE_VERSION,VERSION=5,PRINT,KEY=key"
+            // processor.symbols "FREE","PRINT"
+            // processor.symbols "FREE","VERSION=1"
+            processor.symbols "FREE","VERSION=5"
+            dimension "channel"
         }
-        normal {
-            processor.symbols ""
-            processor.sourceDir file("src/main/java") //override the global setting
+        VIP {
+            processor.symbols "VIP"
+            dimension "channel"
         }
     }
 }
@@ -56,12 +66,13 @@ preprocessor {
     verbose true
     sourceDir file("src/main/java")
     targetDir file("src/main/java")
+    symbols "GLOBAL","GLOBAL_2"
 }
 
 // custom task
 task customProcessJavaTask(type:wang.dannyhe.tools.PreprocessorTask) {
     sourceDir file("src/main/java")
     targetDir file("src/main/java")
-    symbols "FREE_VERSION"
+    symbols "FREE_VERSION,PRINT"
     verbose true
 }
