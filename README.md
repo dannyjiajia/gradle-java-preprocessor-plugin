@@ -31,8 +31,51 @@ apply plugin: 'wang.dannyhe.tools.preprocessor' //make sure to apply this plugin
 ~~~
 
 ## Usage
+### Config(above v0.0.6)
 
-### Config
+The global config is required.
+
+~~~
+preprocessor {
+    verbose true
+    sourceDir file("src/main/java") //required
+    targetDir file("src/main/java") //required
+    symbols "GLOBAL","GLOBAL_2" //symbols is  valid for each flavors
+}
+~~~
+
+`processor`  in `productFlavors` without `sourceDir` and `targetDir`,and you can use `flavorDimensions`.
+
+~~~
+flavorDimensions "money", "channel"
+    productFlavors {
+
+        xiaomi {
+            processor.symbols "XIAOMI"
+            dimension "money"
+        }
+
+        huawei {
+            processor.symbols "HUAWEI"
+            dimension "channel"
+        }
+
+        free {
+            // uncomment to test process.
+            // processor.symbols "FREE","PRINT"
+            // processor.symbols "FREE","VERSION=1"
+            processor.symbols "FREE","VERSION=5"
+            dimension "channel"
+        }
+
+        vip {
+            processor.symbols "VIP"
+            dimension "channel"
+        }
+    }
+~~~
+
+### Config(0.0.5 and previous versions)
 
 The global config is optional.
 
@@ -44,7 +87,6 @@ preprocessor {
     targetDir file("src/main/java") //the root dir to export the java source files
     groupName 'preprocessor' //the group name for plugin auto create tasks
 }
-
 ~~~
 
 Plugin adds `processor` to the Android plugin in `productFlavors`.You can define the processor argments for each flavor build.
