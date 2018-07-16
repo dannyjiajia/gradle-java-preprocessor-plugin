@@ -26,7 +26,7 @@ buildscript {
         classpath 'wang.dannyhe.tools:plugin:latest.release' //use the latest version 
     }
 }
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.application' //'com.android.library'
 apply plugin: 'wang.dannyhe.tools.preprocessor' //make sure to apply this plugin after the Android plugin
 ~~~
 

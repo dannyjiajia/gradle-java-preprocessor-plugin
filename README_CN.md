@@ -21,7 +21,7 @@ buildscript {
         classpath 'wang.dannyhe.tools:plugin:latest.release' //使用最新版本
     }
 }
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.application' //'com.android.library'
 apply plugin: 'wang.dannyhe.tools.preprocessor' //一定要在android插件用用后再应用这个插件
 ~~~
 
