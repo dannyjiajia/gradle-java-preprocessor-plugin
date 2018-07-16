@@ -143,7 +143,7 @@ we can define the custom preprocessor task.
 task customProcessJavaTask(type:wang.dannyhe.tools.PreprocessorTask) {
     sourceDir file("src/main/java")
     targetDir file("src/main/java")
-    symbols "FREE_VERSION"
+    symbols "FREE_VERSION,PRINT" 
     verbose true
 }
 ~~~

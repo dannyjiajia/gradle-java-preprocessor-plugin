@@ -22,7 +22,7 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application' //'com.android.library'
-apply plugin: 'wang.dannyhe.tools.preprocessor' //一定要在android插件用用后再应用这个插件
+apply plugin: 'wang.dannyhe.tools.preprocessor' //一定要在插件用用后再应用这个插件
 ~~~
 
 ## 使用
@@ -140,7 +140,7 @@ gradle preprocessFreeRelease
 task customProcessJavaTask(type:wang.dannyhe.tools.PreprocessorTask) {
     sourceDir file("src/main/java")
     targetDir file("src/main/java")
-    symbols "FREE_VERSION"
+    symbols "FREE_VERSION,PRINT"
     verbose true
 }
 ~~~
