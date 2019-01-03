@@ -1,5 +1,6 @@
 # gradle-java-preprocessor-plugin
 
+[![Build Status](https://travis-ci.org/dannyjiajia/gradle-java-preprocessor-plugin.svg?branch=master)](https://travis-ci.org/dannyjiajia/gradle-java-preprocessor-plugin)
 [ ![Download](https://api.bintray.com/packages/dannyjiajia/gradle-plugins/plugin/images/download.svg) ](https://bintray.com/dannyjiajia/gradle-plugins/plugin/_latestVersion)
 
 ## 特点
