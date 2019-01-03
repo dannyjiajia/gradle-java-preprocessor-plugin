@@ -1,25 +1,24 @@
 language: android
+sudo: false
+
 android:
   components:
+    - platform-tools
     - tools
     - build-tools-25.0.0
-    - $ANDROID_TARGET
-    - sys-img-$ANDROID_ABI-$ANDROID_TARGET
-    - extra-android-support
+    - android-22
+    - android-23
+    - sys-img-armeabi-v7a-android-22
     - extra-android-m2repository
-    - extra-google-m2repository
-  licenses:
-    - 'android-sdk-license.*'
 
-env:
-  matrix:
-    - ANDROID_TARGET=android-23  ANDROID_ABI=armeabi
-# Emulator Management: Create, Start and Wait
 before_script:
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+  # Create and start emulator
+  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
+
+script: ./gradlew connectedAndroidTest
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
