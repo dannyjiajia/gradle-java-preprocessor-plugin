@@ -3,21 +3,21 @@ android:
   components:
     - tools
     - build-tools-25.0.0
-    - android-23
-    - android-25
-    - extra-android-m2repository
+    - $ANDROID_TARGET
+    - sys-img-armeabi-v7a-$ANDROID_TARGET
     - extra-android-support
-    - sys-img-armeabi-v7a-android-23
-
+    - extra-android-m2repository
+    - extra-google-m2repository
   licenses:
     - 'android-sdk-license.*'
 
-
+env:
+  matrix:
+    - ANDROID_TARGET=android-23  ANDROID_ABI=armeabi-v7a
 # Emulator Management: Create, Start and Wait
 before_script:
-  - chmod +x gradlew
-  - echo no | android create avd --force -n test -t android-23 --abi armeabi-v7a
-  - emulator -avd test -no-audio -no-window &
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+  - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 
