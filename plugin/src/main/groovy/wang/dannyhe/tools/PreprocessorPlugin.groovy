@@ -5,6 +5,7 @@ import groovy.transform.ToString
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.ProjectConfigurationException
+import org.gradle.api.tasks.compile.JavaCompile
 
 public class PreprocessorPlugin implements Plugin<Project> {
 
@@ -63,7 +64,14 @@ public class PreprocessorPlugin implements Plugin<Project> {
             group global.groupName
             description "Preprocess java source code for ${processorTaskName}:${fSymbols.join(",")}"
         }
-        variant.javaCompile.dependsOn processorTaskName
+
+        JavaCompile javaCompile
+        if (variant.hasProperty('javaCompileProvider')) {
+            javaCompile = variant.javaCompileProvider.get()
+        } else {
+            javaCompile = variant.javaCompile
+        }
+        javaCompile.dependsOn processorTaskName
     }
 }
 
